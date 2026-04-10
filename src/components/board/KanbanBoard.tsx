@@ -105,7 +105,7 @@ export function KanbanBoard({ columns: initialColumns, milestone }: KanbanBoardP
         <div className="flex items-center gap-2">
           <Kanban size={16} className="text-[#9191a0]" />
           <h1 className="text-[15px] font-semibold text-[#dcdcde]">Active Board</h1>
-          <span className="text-[12px] text-[#9191a0]">— GitHub issues</span>
+          <span className="text-[12px] text-[#9191a0]">— active complaint workflow</span>
         </div>
         {milestone && (
           <div className="flex items-center gap-3">

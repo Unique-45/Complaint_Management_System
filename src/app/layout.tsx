@@ -13,10 +13,10 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "Synapse — Maintainer Dashboard",
-    template: "%s | Synapse",
+    default: "Complaint Management System",
+    template: "%s | Complaint Management System",
   },
-  description: "High-performance issue tracking for open-source maintainers",
+  description: "Complaint triage and tracking dashboard for review teams",
   robots: { index: false, follow: false },
 };
 

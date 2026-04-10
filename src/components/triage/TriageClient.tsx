@@ -155,7 +155,7 @@ export function TriageClient({ issues, activeFilter }: { issues: Issue[]; active
         {issues.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-[#9191a0] gap-3">
             <Inbox size={40} className="opacity-30" />
-            <p className="text-[14px]">No issues in this view</p>
+            <p className="text-[14px]">No complaints in this view</p>
           </div>
         ) : (
           <table className="w-full border-collapse">

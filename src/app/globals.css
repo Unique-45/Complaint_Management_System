@@ -126,7 +126,7 @@ html {
   border: 1px solid transparent;
 }
 
-/* Issue number — monospace, muted */
+/* Complaint number — monospace, muted */
 .issue-number {
   font-family: var(--font-mono), monospace;
   font-size: 12px;
@@ -157,7 +157,7 @@ html {
   border-radius: 0 2px 2px 0;
 }
 
-/* Stale issue ambient glow */
+/* Stale complaint ambient glow */
 .issue-stale {
   border-left: 3px solid #c8a000 !important;
 }
