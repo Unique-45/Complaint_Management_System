@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "db:up": "bash ./scripts/db-up.sh",
+    "db:reset": "bash ./scripts/db-reset.sh",
     "db:push": "prisma db push",
     "db:seed": "prisma db seed",
     "db:migrate": "prisma migrate dev",
