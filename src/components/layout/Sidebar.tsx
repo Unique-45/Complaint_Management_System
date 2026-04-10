@@ -30,7 +30,7 @@ interface SidebarProps {
 }
 
 const SAVED_FILTERS = [
-  { label: "My Issues", href: "/dashboard/triage?assignee=me" },
+  { label: "My Complaints", href: "/dashboard/triage?assignee=me" },
   { label: "High Priority", href: "/dashboard/triage?priority=HIGH,CRITICAL" },
   { label: "Stale > 30d", href: "/dashboard/triage?stale=true" },
   { label: "Hardware Bugs", href: "/dashboard/triage?label=hardware" },

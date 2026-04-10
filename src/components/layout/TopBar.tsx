@@ -46,7 +46,7 @@ export function TopBar({ orgName }: TopBarProps) {
           className="flex items-center gap-1.5 px-2.5 py-1 bg-[#7759c2] hover:bg-[#8b6fd4] text-white text-[12px] font-medium rounded transition-colors"
         >
           <Plus size={13} />
-          New Issue
+          New Complaint
         </button>
         <button className="p-1.5 rounded hover:bg-[#303036] text-[#9191a0] hover:text-[#dcdcde] transition-colors relative">
           <Bell size={15} />

@@ -37,7 +37,7 @@ export function CreateIssueModal() {
     setIsSubmitting(true);
     try {
       const issue = await createIssue({ title, body, priority });
-      toast.success(`Issue #${issue.number} created successfully`);
+      toast.success(`Complaint #${issue.number} created successfully`);
       
       // reset
       setTitle("");
@@ -45,7 +45,7 @@ export function CreateIssueModal() {
       setPriority(Priority.NONE);
       closeModal();
     } catch (err) {
-      toast.error("Failed to create issue");
+      toast.error("Failed to create complaint");
     } finally {
       setIsSubmitting(false);
     }
@@ -56,7 +56,7 @@ export function CreateIssueModal() {
       <DialogContent className="bg-[#1f2023] border-[#404048] text-[#dcdcde] w-full max-w-2xl p-0 gap-0 shadow-2xl">
         <form onSubmit={handleSubmit}>
           <DialogHeader className="px-5 py-4 border-b border-[#404048]">
-            <DialogTitle className="text-[16px] font-semibold">New Issue</DialogTitle>
+            <DialogTitle className="text-[16px] font-semibold">New Complaint</DialogTitle>
           </DialogHeader>
 
           <div className="p-5 space-y-4 bg-[#26262c]">
@@ -70,7 +70,7 @@ export function CreateIssueModal() {
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="Issue title..."
+                placeholder="Complaint title..."
                 className="w-full bg-[#1f2023] border border-[#404048] rounded px-3 py-2 text-[14px] text-[#dcdcde] placeholder:text-[#5a5a6a] focus:outline-none focus:border-[#7759c2] transition-colors"
               />
             </div>
@@ -83,7 +83,7 @@ export function CreateIssueModal() {
               <textarea
                 value={body}
                 onChange={(e) => setBody(e.target.value)}
-                placeholder="Details about the issue (Markdown supported)..."
+                placeholder="Describe the complaint details..."
                 rows={5}
                 className="w-full bg-[#1f2023] border border-[#404048] rounded px-3 py-2 text-[13px] text-[#dcdcde] placeholder:text-[#5a5a6a] resize-y focus:outline-none focus:border-[#7759c2] transition-colors"
                 onKeyDown={(e) => {
@@ -137,7 +137,7 @@ export function CreateIssueModal() {
                 disabled={isSubmitting || !title.trim()}
                 className="px-4 py-1.5 rounded bg-[#7759c2] text-white text-[13px] font-medium hover:bg-[#8b6fd4] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                {isSubmitting ? "Creating..." : "Create Issue"}
+                {isSubmitting ? "Creating..." : "Create Complaint"}
               </button>
             </div>
           </DialogFooter>
