@@ -56,8 +56,8 @@ export function TopBar({ orgName }: TopBarProps) {
           <HelpCircle size={15} />
         </button>
         <Avatar className="w-7 h-7 cursor-pointer">
-          <AvatarImage src="https://api.dicebear.com/9.x/avataaars/svg?seed=alice" />
-          <AvatarFallback className="bg-[#7759c2] text-white text-[11px]">AC</AvatarFallback>
+          <AvatarImage src="https://api.dicebear.com/9.x/avataaars/svg?seed=mayank" />
+          <AvatarFallback className="bg-[#7759c2] text-white text-[11px]">MG</AvatarFallback>
         </Avatar>
       </div>
     </header>

@@ -216,11 +216,11 @@ export function Sidebar({ orgName, triageCount }: SidebarProps) {
         {!collapsed ? (
           <div className="flex items-center gap-2 p-1.5 rounded hover:bg-[#303036] cursor-pointer transition-colors">
             <Avatar className="w-6 h-6 flex-shrink-0">
-              <AvatarImage src="https://api.dicebear.com/9.x/avataaars/svg?seed=alice" />
-              <AvatarFallback className="bg-[#7759c2] text-white text-[10px]">AC</AvatarFallback>
+              <AvatarImage src="https://api.dicebear.com/9.x/avataaars/svg?seed=mayank" />
+              <AvatarFallback className="bg-[#7759c2] text-white text-[10px]">MG</AvatarFallback>
             </Avatar>
             <div className="flex-1 min-w-0">
-              <p className="text-[12px] text-[#dcdcde] leading-tight font-medium truncate">Alice Chen</p>
+              <p className="text-[12px] text-[#dcdcde] leading-tight font-medium truncate">Mayank Goyal</p>
               <p className="text-[10px] text-[#9191a0] leading-tight">Maintainer</p>
             </div>
             <Link href="/dashboard/settings">
