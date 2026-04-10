@@ -29,36 +29,36 @@ async function main() {
     prisma.member.create({
       data: {
         orgId: org.id,
-        name: "Aarav Mehta",
-        handle: "aarav",
-        avatarUrl: `https://api.dicebear.com/9.x/avataaars/svg?seed=aarav`,
+        name: "Mayank Goyal",
+        handle: "mayank",
+        avatarUrl: `https://api.dicebear.com/9.x/avataaars/svg?seed=mayank`,
         role: "maintainer",
       },
     }),
     prisma.member.create({
       data: {
         orgId: org.id,
-        name: "Nisha Kapoor",
-        handle: "nisha",
-        avatarUrl: `https://api.dicebear.com/9.x/avataaars/svg?seed=nisha`,
+        name: "Ayush Sharma",
+        handle: "ayush",
+        avatarUrl: `https://api.dicebear.com/9.x/avataaars/svg?seed=ayush`,
         role: "maintainer",
       },
     }),
     prisma.member.create({
       data: {
         orgId: org.id,
-        name: "Rohan Sethi",
-        handle: "rohan",
-        avatarUrl: `https://api.dicebear.com/9.x/avataaars/svg?seed=rohan`,
+        name: "Priya Verma",
+        handle: "priya",
+        avatarUrl: `https://api.dicebear.com/9.x/avataaars/svg?seed=priya`,
         role: "contributor",
       },
     }),
     prisma.member.create({
       data: {
         orgId: org.id,
-        name: "Ishita Verma",
-        handle: "ishita",
-        avatarUrl: `https://api.dicebear.com/9.x/avataaars/svg?seed=ishita`,
+        name: "Rohan Gupta",
+        handle: "rohan",
+        avatarUrl: `https://api.dicebear.com/9.x/avataaars/svg?seed=rohan`,
         role: "maintainer",
       },
     }),
@@ -458,7 +458,7 @@ async function main() {
   if (issue255) {
     await prisma.note.createMany({
       data: [
-        { issueId: issue255.id, authorId: carol.id, body: "PR #118 is ready for review. CI is green. @alice can you take a look?", isPublic: false },
+        { issueId: issue255.id, authorId: carol.id, body: "PR #118 is ready for review. CI is green. @mayank can you take a look?", isPublic: false },
         { issueId: issue255.id, authorId: alice.id, body: "Looks good from my end. Will merge once we get a second approval.", isPublic: false },
         { issueId: issue255.id, authorId: carol.id, body: "We're tracking this — a fix is in review and will be in v2.4.", isPublic: true },
       ],
