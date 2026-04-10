@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useCreateIssueStore } from "@/stores/createIssueStore";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { createIssue } from "@/server/actions/issues";
@@ -18,6 +19,7 @@ const PRIORITIES = [
 
 export function CreateIssueModal() {
   const { isOpen, closeModal } = useCreateIssueStore();
+  const router = useRouter();
   
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
@@ -44,6 +46,8 @@ export function CreateIssueModal() {
       setBody("");
       setPriority(Priority.NONE);
       closeModal();
+      router.push("/dashboard/board");
+      router.refresh();
     } catch (err) {
       toast.error("Failed to create complaint");
     } finally {

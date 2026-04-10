@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   DndContext,
@@ -44,6 +44,10 @@ export function KanbanBoard({ columns: initialColumns, milestone }: KanbanBoardP
   const [columns, setColumns] = useState(initialColumns);
   const [activeId, setActiveId] = useState<string | null>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    setColumns(initialColumns);
+  }, [initialColumns]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
