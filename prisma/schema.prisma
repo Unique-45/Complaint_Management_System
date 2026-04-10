@@ -1,168 +1,158 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
-enum UserRole {
-  CUSTOMER
-  AGENT
-  ADMIN
-  MANAGER
+enum IssueSource {
+  DISCORD
+  GITHUB
 }
 
 enum IssueStatus {
-  NEW
-  ASSIGNED
+  TRIAGE_PENDING
+  TRIAGE_SPAM
+  TRIAGE_PROMOTED
+  BACKLOG
+  TODO
   IN_PROGRESS
-  RESOLVED
+  IN_REVIEW
+  DONE
   CLOSED
-  REOPENED
 }
 
-enum IssuePriority {
+enum Priority {
+  NONE
   LOW
   MEDIUM
   HIGH
   CRITICAL
 }
 
-enum NotificationType {
-  STATUS_CHANGE
-  COMMENT
-  ASSIGNMENT
-  SYSTEM
+model Organization {
+  id         String      @id @default(cuid())
+  name       String
+  slug       String      @unique
+  avatarUrl  String?
+  members    Member[]
+  issues     Issue[]
+  labels     Label[]
+  milestones Milestone[]
+  createdAt  DateTime    @default(now())
 }
 
-model User {
-  id            String     @id @default(cuid())
-  email         String     @unique
-  name          String?
-  password      String
-  role          UserRole   @default(CUSTOMER)
-  emailVerified DateTime?
-  image         String?
-  phone         String?
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
-  isActive      Boolean    @default(true)
-
-  // Relations
-  createdIssues      Issue[]        @relation("CreatedBy")
-  assignedIssues     Issue[]        @relation("AssignedTo")
-  managedUsers       User[]         @relation("ManagedBy")
-  manager            User?          @relation("ManagedBy", fields: [managerId], references: [id])
-  managerId          String?
-  comments           Comment[]
-  notifications      Notification[]
-  auditLogs          AuditLog[]
-
-  @@index([email])
-  @@index([role])
+model Member {
+  id          String          @id @default(cuid())
+  orgId       String
+  org         Organization    @relation(fields: [orgId], references: [id])
+  name        String
+  handle      String
+  avatarUrl   String?
+  role        String          @default("maintainer")
+  notes       Note[]
+  assignments IssueAssignee[]
 }
 
-model Category {
-  id        String   @id @default(cuid())
-  name      String   @unique
-  description String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Label {
+  id     String       @id @default(cuid())
+  orgId  String
+  org    Organization @relation(fields: [orgId], references: [id])
+  name   String
+  color  String
+  issues IssueLabel[]
+}
 
-  issues Issue[]
-
-  @@index([name])
+model Milestone {
+  id      String       @id @default(cuid())
+  orgId   String
+  org     Organization @relation(fields: [orgId], references: [id])
+  title   String
+  dueDate DateTime?
+  issues  Issue[]
 }
 
 model Issue {
-  id          String        @id @default(cuid())
-  ticketId    String        @unique // Auto-generated
+  id          String      @id @default(cuid())
+  number      Int
   title       String
-  description String
-  category    Category      @relation(fields: [categoryId], references: [id])
-  categoryId  String
-  status      IssueStatus   @default(NEW)
-  priority    IssuePriority @default(MEDIUM)
-  createdBy   User          @relation("CreatedBy", fields: [createdById], references: [id])
-  createdById String
-  assignedTo  User?         @relation("AssignedTo", fields: [assignedToId], references: [id])
-  assignedToId String?
-  resolvedAt  DateTime?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  body        String      @db.Text
+  source      IssueSource
+  status      IssueStatus @default(TRIAGE_PENDING)
+  priority    Priority    @default(NONE)
+  orgId       String
+  org         Organization    @relation(fields: [orgId], references: [id])
+  assignees   IssueAssignee[]
+  labels      IssueLabel[]
+  milestoneId String?
+  milestone   Milestone?  @relation(fields: [milestoneId], references: [id])
 
-  // Relations
-  comments     Comment[]
-  attachments  Attachment[]
-  notifications Notification[]
-  auditLogs    AuditLog[]
+  // Discord metadata
+  discordThreadId   String?
+  discordAuthorId   String?
+  discordAuthorName String?
+  discordAvatarUrl  String?
+  discordReplies    Json?   // array of {author, body, timestamp}
 
-  @@index([status])
-  @@index([priority])
-  @@index([categoryId])
-  @@index([createdById])
-  @@index([assignedToId])
-  @@index([ticketId])
+  // GitHub metadata (after promotion)
+  githubIssueNumber Int?
+  githubIssueUrl    String?
+  linkedPRs         LinkedPR[]
+
+  // AI deduplication
+  similarityScore Float?
+  duplicateOfId   String?
+  duplicateOf     Issue?  @relation("Duplicates", fields: [duplicateOfId], references: [id])
+  duplicates      Issue[] @relation("Duplicates")
+
+  // Comms
+  notes Note[]
+
+  // Tracking
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  lastActivityAt DateTime @default(now())
+
+  @@unique([orgId, number])
 }
 
-model Comment {
+model LinkedPR {
+  id       String @id @default(cuid())
+  issueId  String
+  issue    Issue  @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  prNumber Int
+  prUrl    String
+  ciStatus String // "success" | "failure" | "pending" | "running"
+  title    String
+}
+
+model Note {
   id        String   @id @default(cuid())
-  content   String
-  author    User     @relation(fields: [authorId], references: [id])
+  issueId   String
+  issue     Issue    @relation(fields: [issueId], references: [id], onDelete: Cascade)
   authorId  String
-  issue     Issue    @relation(fields: [issueId], references: [id], onDelete: Cascade)
-  issueId   String
+  author    Member   @relation(fields: [authorId], references: [id])
+  body      String   @db.Text
+  isPublic  Boolean  @default(false)
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([issueId])
-  @@index([authorId])
 }
 
-model Attachment {
-  id        String   @id @default(cuid())
-  filename  String
-  fileUrl   String   // S3 or Cloudinary URL
-  fileType  String
-  issue     Issue    @relation(fields: [issueId], references: [id], onDelete: Cascade)
-  issueId   String
-  createdAt DateTime @default(now())
+model IssueAssignee {
+  issueId  String
+  memberId String
+  issue    Issue  @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  member   Member @relation(fields: [memberId], references: [id])
 
-  @@index([issueId])
+  @@id([issueId, memberId])
 }
 
-model Notification {
-  id        String           @id @default(cuid())
-  type      NotificationType
-  subject   String
-  message   String
-  user      User             @relation(fields: [userId], references: [id])
-  userId    String
-  issue     Issue?           @relation(fields: [issueId], references: [id], onDelete: SetNull)
-  issueId   String?
-  isRead    Boolean          @default(false)
-  sentVia   String           @default("in-app") // "in-app" or "email"
-  createdAt DateTime         @default(now())
+model IssueLabel {
+  issueId String
+  labelId String
+  issue   Issue  @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  label   Label  @relation(fields: [labelId], references: [id])
 
-  @@index([userId])
-  @@index([isRead])
-}
-
-model AuditLog {
-  id        String   @id @default(cuid())
-  action    String   // e.g., "ISSUE_CREATED", "STATUS_CHANGED"
-  entity    String   // e.g., "ISSUE", "USER"
-  entityId  String
-  changes   Json?    // Store old and new values
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  issue     Issue?   @relation(fields: [issueId], references: [id], onDelete: SetNull)
-  issueId   String?
-  createdAt DateTime @default(now())
-
-  @@index([action])
-  @@index([entity])
-  @@index([userId])
+  @@id([issueId, labelId])
 }
