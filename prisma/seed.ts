@@ -18,8 +18,8 @@ async function main() {
   // Create org
   const org = await prisma.organization.create({
     data: {
-      name: "Hyprland",
-      slug: "hyprland",
+      name: "Complaint Management Cell",
+      slug: "complaint-management-cell",
       avatarUrl: null,
     },
   });
@@ -29,36 +29,36 @@ async function main() {
     prisma.member.create({
       data: {
         orgId: org.id,
-        name: "Mayank Goyal",
-        handle: "mayank",
-        avatarUrl: `https://api.dicebear.com/9.x/avataaars/svg?seed=mayank`,
+        name: "Aarav Mehta",
+        handle: "aarav",
+        avatarUrl: `https://api.dicebear.com/9.x/avataaars/svg?seed=aarav`,
         role: "maintainer",
       },
     }),
     prisma.member.create({
       data: {
         orgId: org.id,
-        name: "Bob Müller",
-        handle: "bob",
-        avatarUrl: `https://api.dicebear.com/9.x/avataaars/svg?seed=bob`,
+        name: "Nisha Kapoor",
+        handle: "nisha",
+        avatarUrl: `https://api.dicebear.com/9.x/avataaars/svg?seed=nisha`,
         role: "maintainer",
       },
     }),
     prisma.member.create({
       data: {
         orgId: org.id,
-        name: "Carol Singh",
-        handle: "carol",
-        avatarUrl: `https://api.dicebear.com/9.x/avataaars/svg?seed=carol`,
+        name: "Rohan Sethi",
+        handle: "rohan",
+        avatarUrl: `https://api.dicebear.com/9.x/avataaars/svg?seed=rohan`,
         role: "contributor",
       },
     }),
     prisma.member.create({
       data: {
         orgId: org.id,
-        name: "Dave Kim",
-        handle: "dave",
-        avatarUrl: `https://api.dicebear.com/9.x/avataaars/svg?seed=dave`,
+        name: "Ishita Verma",
+        handle: "ishita",
+        avatarUrl: `https://api.dicebear.com/9.x/avataaars/svg?seed=ishita`,
         role: "maintainer",
       },
     }),
