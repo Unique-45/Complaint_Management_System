@@ -1,141 +1,36 @@
-# Complaint Tracking System
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-A modern web application for managing customer complaints and support tickets.
+## Getting Started
 
-## Features
+First, run the development server:
 
-- User authentication (signup/login)
-- Create and manage complaint issues
-- Comment on issues
-- Real-time notifications
-- Role-based dashboards (Admin, Agent, Customer)
-- Advanced search and filtering
-- Issue priority and status tracking
-
-## Tech Stack
-
-- **Frontend:** React 18, Next.js 14, TypeScript 5, Tailwind CSS 3.3
-- **Backend:** Next.js API Routes, Node.js 18+
-- **Database:** PostgreSQL 13+
-- **ORM:** Prisma 5.7+
-- **Authentication:** NextAuth.js 4.24+
-
-## Prerequisites
-
-- Node.js 18+
-- PostgreSQL 13+
-- npm or yarn
-
-## Installation
-
-1. Clone the repository
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Setup environment variables in `.env.local`:
-   ```
-   DATABASE_URL="postgresql://user:password@localhost:5432/complaint_system"
-   NEXTAUTH_SECRET="your-secret-key"
-   NEXTAUTH_URL="http://localhost:3002"
-   ```
-
-4. Run migrations:
-   ```bash
-   npx prisma migrate dev
-   ```
-
-5. Seed the database:
-   ```bash
-   npx prisma db seed
-   ```
-
-## Running the Application
-
-Start the development server:
 ```bash
 npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-Open [http://localhost:3002](http://localhost:3002) in your browser.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## API Endpoints
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-### Authentication
-- `POST /api/auth/signup` - Create new account
-- `POST /api/auth/callback/credentials` - Login
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-### Issues
-- `GET /api/issues` - Get all issues
-- `POST /api/issues` - Create new issue
-- `GET /api/issues/[id]` - Get issue details
-- `PATCH /api/issues/[id]` - Update issue
+## Learn More
 
-### Comments
-- `POST /api/comments` - Post comment on issue
+To learn more about Next.js, take a look at the following resources:
 
-## Database Schema
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-See [prisma/schema.prisma](prisma/schema.prisma) for complete schema.
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-### Models
-- **User:** System users (Admin, Agent, Customer)
-- **Issue:** Customer complaints/tickets
-- **Comment:** Comments on issues
-- **Category:** Issue categories
-- **Notification:** User notifications
-- **AuditLog:** System audit logs
+## Deploy on Vercel
 
-## Default Test Credentials
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Admin:
-- Email: admin@example.com
-- Password: Admin@123456
-
-Agent:
-- Email: agent1@example.com
-- Password: Agent@123456
-
-Customer:
-- Email: customer@example.com
-- Password: Customer@123456
-
-## Project Structure
-
-```
-complaint_system/
-├── app/
-│   ├── api/
-│   │   ├── auth/
-│   │   ├── issues/
-│   │   └── comments/
-│   ├── dashboard/
-│   ├── issues/
-│   ├── login/
-│   └── signup/
-├── components/
-│   └── Header.tsx
-├── prisma/
-│   ├── schema.prisma
-│   ├── seed.ts
-│   └── migrations/
-├── .env.local
-├── package.json
-└── README.md
-```
-
-## Contributing
-
-1. Create a feature branch
-2. Make your changes
-3. Commit with clear messages
-4. Push and create a Pull Request
-
-## Team Members
-
-- Member 1: Database & Schema
-- Member 2: Authentication
-- Member 3: Frontend UI
-- Member 4: Backend APIs
-- Member 5: Documentation
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
