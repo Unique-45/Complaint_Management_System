@@ -9,7 +9,7 @@ export const MOCK_SESSION = {
     org: {
       id: "mock-org-id",
       name: "Complaint Management",
-      slug: "hyprland",
+      slug: "complaint-management",
     },
   },
 };
