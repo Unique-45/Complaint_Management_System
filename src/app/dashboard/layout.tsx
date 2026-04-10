@@ -31,11 +31,11 @@ export default async function DashboardLayout({
   return (
     <div className="flex h-screen w-full overflow-hidden bg-[#1f2023]">
       <Sidebar
-        orgName={org?.name ?? "IssueTraker"}
+        orgName={org?.name ?? "Complaint Management"}
         triageCount={triagePendingCount}
       />
       <div className="flex flex-col flex-1 min-w-0">
-        <TopBar orgName={org?.name ?? "IssueTraker"} />
+        <TopBar orgName={org?.name ?? "Complaint Management"} />
         <main className="flex-1 overflow-auto relative">
           {children}
         </main>

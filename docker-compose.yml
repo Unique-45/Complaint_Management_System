@@ -4,7 +4,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: issue_tracker
+      POSTGRES_DB: complaint_management
     ports:
       - "5432:5432"
     volumes:

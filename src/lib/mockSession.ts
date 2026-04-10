@@ -8,7 +8,7 @@ export const MOCK_SESSION = {
     role: "maintainer",
     org: {
       id: "mock-org-id",
-      name: "Hyprland",
+      name: "Complaint Management",
       slug: "hyprland",
     },
   },
