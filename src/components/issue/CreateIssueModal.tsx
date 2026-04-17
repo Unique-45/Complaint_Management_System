@@ -17,6 +17,14 @@ const PRIORITIES = [
   { value: Priority.CRITICAL, label: "Critical", color: "text-[#ff4d4f] bg-[#4a0b0b] border-[#ff4d4f]/30" },
 ];
 
+const TITLE_WORD_LIMIT = 200;
+
+function countWords(input: string) {
+  const normalized = input.trim();
+  if (!normalized) return 0;
+  return normalized.split(/\s+/).length;
+}
+
 export function CreateIssueModal() {
   const { isOpen, closeModal } = useCreateIssueStore();
   const router = useRouter();
@@ -25,6 +33,8 @@ export function CreateIssueModal() {
   const [body, setBody] = useState("");
   const [priority, setPriority] = useState<Priority>(Priority.NONE);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const titleWordCount = countWords(title);
+  const isTitleOverLimit = titleWordCount > TITLE_WORD_LIMIT;
 
   // Since Shadcn base-ui Dialog expects to control open via local state usually, 
   // we pass `open={isOpen}` and `onOpenChange={(open) => !open && closeModal()}`
@@ -33,6 +43,11 @@ export function CreateIssueModal() {
     e.preventDefault();
     if (!title.trim()) {
       toast.error("Title is required");
+      return;
+    }
+
+    if (isTitleOverLimit) {
+      toast.error(`Title cannot exceed ${TITLE_WORD_LIMIT} words`);
       return;
     }
     
@@ -77,6 +92,9 @@ export function CreateIssueModal() {
                 placeholder="Complaint title..."
                 className="w-full bg-[#1f2023] border border-[#404048] rounded px-3 py-2 text-[14px] text-[#dcdcde] placeholder:text-[#5a5a6a] focus:outline-none focus:border-[#7759c2] transition-colors"
               />
+              <p className={cn("mt-1 text-[11px]", isTitleOverLimit ? "text-[#ff4d4f]" : "text-[#9191a0]")}>
+                {titleWordCount}/{TITLE_WORD_LIMIT} words
+              </p>
             </div>
 
             {/* Description */}
@@ -138,7 +156,7 @@ export function CreateIssueModal() {
               </button>
               <button
                 type="submit"
-                disabled={isSubmitting || !title.trim()}
+                disabled={isSubmitting || !title.trim() || isTitleOverLimit}
                 className="px-4 py-1.5 rounded bg-[#7759c2] text-white text-[13px] font-medium hover:bg-[#8b6fd4] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 {isSubmitting ? "Creating..." : "Create Complaint"}

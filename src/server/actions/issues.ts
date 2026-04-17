@@ -4,6 +4,21 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { IssueStatus, Priority } from "@prisma/client";
 
+const TITLE_WORD_LIMIT = 200;
+
+function countWords(input: string) {
+  const normalized = input.trim();
+  if (!normalized) return 0;
+  return normalized.split(/\s+/).length;
+}
+
+function validateTitleWordLimit(title: string) {
+  const words = countWords(title);
+  if (words > TITLE_WORD_LIMIT) {
+    throw new Error(`Title cannot exceed ${TITLE_WORD_LIMIT} words`);
+  }
+}
+
 export async function promoteIssue(issueId: string) {
   await prisma.issue.update({
     where: { id: issueId },
@@ -69,6 +84,8 @@ export async function moveKanbanCard(issueId: string, newStatus: IssueStatus) {
 }
 
 export async function updateTitle(issueId: string, title: string) {
+  validateTitleWordLimit(title);
+
   await prisma.issue.update({
     where: { id: issueId },
     data: { title, lastActivityAt: new Date() },
@@ -95,6 +112,8 @@ export async function bulkSpam(issueIds: string[]) {
 }
 
 export async function createIssue(data: { title: string; body: string; priority: Priority }) {
+  validateTitleWordLimit(data.title);
+
   // Get org (assuming single org for now based on layout.tsx)
   const org = await prisma.organization.findFirst();
   if (!org) throw new Error("No organization found");
