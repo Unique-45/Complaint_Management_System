@@ -1,0 +1,311 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{hyperref}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\setlist[itemize]{leftmargin=1.5em}
+\setlist[enumerate]{leftmargin=1.8em}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  urlcolor=blue,
+  pdftitle={Complaint Management System User Manual},
+  pdfauthor={Complaint Management Team}
+}
+
+\title{Complaint Management System\\User Manual}
+\author{Complaint Management Team}
+\date{April 17, 2026}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Scope Clarification}
+The interface references Discord and GitHub complaint sources, but direct external platform integrations are not implemented in this release.
+
+This is intentional and consistent with the original project scope: Discord/GitHub connector integrations were not part of the SRS.
+
+\section{Purpose}
+This manual explains how to use the Complaint Management System dashboard for day-to-day complaint triage and tracking.
+
+The app is intended for maintainers who need to:
+\begin{itemize}
+  \item review incoming complaints from Discord,
+  \item promote valid complaints into active work,
+  \item track active work on a Kanban board,
+  \item inspect details in a side drawer,
+  \item create new complaints directly.
+\end{itemize}
+
+\section{Prerequisites and Startup}
+Required:
+\begin{itemize}
+  \item Node.js and npm
+  \item Docker
+\end{itemize}
+
+From the project root:
+\begin{verbatim}
+npm install
+cp .env.example .env
+npm run setup
+npm run dev
+\end{verbatim}
+
+Open:
+\begin{itemize}
+  \item \url{http://localhost:3000}
+\end{itemize}
+
+The home route redirects to \texttt{/dashboard/triage}.
+
+\section{Dashboard Layout}
+The UI has four primary areas:
+\begin{enumerate}
+  \item Sidebar (left): navigation, triage count, saved filters, collapse control.
+  \item Top bar: command palette trigger and New Complaint action.
+  \item Main content: Triage, Board, or Settings.
+  \item Overlays: Issue Drawer, Create Complaint modal, Command palette.
+\end{enumerate}
+
+\section{Navigation}
+\subsection{Triage Inbox}
+Path: \texttt{/dashboard/triage}
+
+Used to review incoming Discord complaints before promotion.
+
+Filters:
+\begin{itemize}
+  \item Pending
+  \item All
+  \item Flagged Duplicate
+  \item Promoted
+  \item Spam
+\end{itemize}
+
+\subsection{Active Board}
+Path: \texttt{/dashboard/board}
+
+Used to track active work through stages:
+\begin{itemize}
+  \item Backlog
+  \item Todo
+  \item In Progress
+  \item In Review
+  \item Done
+\end{itemize}
+
+\subsection{Settings}
+Path: \texttt{/dashboard/settings}
+
+Settings cards are currently informational placeholders for future phases.
+
+\section{Triage Inbox Workflow}
+\subsection{Inspect complaints}
+Each row includes complaint number, title, labels, similarity score, reporter, age, status, and quick actions.
+Click a row to open the Issue Drawer.
+
+\subsection{Promote to board}
+Promote via:
+\begin{itemize}
+  \item row hover action,
+  \item key \texttt{p} on focused row,
+  \item command palette action,
+  \item drawer footer button.
+\end{itemize}
+
+Result: status moves to \texttt{BACKLOG}, item appears on Active Board.
+
+\subsection{Mark spam}
+Mark spam via row hover action, key \texttt{x}, command palette, or drawer footer.
+
+Result: status moves to \texttt{TRIAGE\_SPAM}.
+
+\subsection{Mark done}
+Use key \texttt{e} or command palette action.
+
+Result: status moves to \texttt{DONE}.
+
+\subsection{Bulk actions}
+When at least two rows are selected, the bulk action bar appears.
+
+Working bulk actions:
+\begin{itemize}
+  \item Promote All
+  \item Spam All
+  \item Clear Selection
+\end{itemize}
+
+Placeholder actions (phase-2 style feedback only):
+\begin{itemize}
+  \item Mass Reply and Close
+  \item Assign
+  \item Label
+\end{itemize}
+
+\section{Active Board Workflow}
+\subsection{Move cards}
+Drag a card from one column to another.
+
+The UI updates optimistically, then persists the status on the server.
+
+\subsection{Read card metadata}
+Cards show complaint number, priority marker, labels, optional linked PR/CI status, and assignee avatars.
+
+Click a card to open the Issue Drawer.
+
+\subsection{Milestone progress}
+If a milestone is available, header shows title, closed/total count, and a progress bar.
+
+\section{Issue Drawer Workflow}
+\subsection{Open and close}
+Open from triage rows, board cards, or key \texttt{Enter} on focused triage row.
+
+Close with \texttt{Esc}, close icon, backdrop click, or footer Close.
+
+\subsection{View content}
+Drawer may include:
+\begin{itemize}
+  \item title, number, status, stale marker,
+  \item labels and priority,
+  \item Discord thread context (Discord-source complaints),
+  \item issue description (GitHub-source complaints),
+  \item AI similarity section,
+  \item internal notes and public replies tabs,
+  \item right-side metadata: assignees, labels, milestone, GitHub links.
+\end{itemize}
+
+\subsection{Focus mode}
+Toggle with key \texttt{f} or focus button in drawer header.
+
+\subsection{Drawer actions}
+Working actions:
+\begin{itemize}
+  \item Promote to GitHub (footer)
+  \item Mark Spam (footer)
+\end{itemize}
+
+Currently shown as coming soon:
+\begin{itemize}
+  \item Merge into
+  \item Flag Duplicate
+  \item Create Branch
+  \item Note compose persistence from textarea submit
+\end{itemize}
+
+\section{Create New Complaint}
+Open modal via New Complaint button or key \texttt{c}.
+
+Fields:
+\begin{itemize}
+  \item Title (required)
+  \item Description
+  \item Priority
+\end{itemize}
+
+Submit with button or \texttt{Ctrl+Enter} (or \texttt{Cmd+Enter} on macOS).
+
+Result: complaint is created with source \texttt{GITHUB} and initial status \texttt{TODO}, then user is routed to Active Board.
+
+\section{Command Palette}
+Open with \texttt{Ctrl+K} (or \texttt{Cmd+K}) or top-bar trigger.
+
+Groups:
+\begin{itemize}
+  \item Navigate: triage, board, settings
+  \item Actions: assign, promote, spam, done, merge, flag duplicate
+  \item View: toggle focus mode
+\end{itemize}
+
+Some actions are placeholders depending on implementation state.
+
+\section{Keyboard Shortcuts}
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.30\textwidth} >{\raggedright\arraybackslash}p{0.62\textwidth}}
+\textbf{Shortcut} & \textbf{Effect} \\
+\hline
+\texttt{c} & Open Create Complaint modal \\
+\texttt{Esc} & Close drawer or create modal \\
+\texttt{Ctrl+K} / \texttt{Cmd+K} & Open command palette \\
+\texttt{?} & Toggle keyboard help event \\
+\texttt{f} & Toggle drawer focus mode \\
+\texttt{j} / \texttt{k} & Move triage focus down/up \\
+\texttt{Enter} & Open focused triage complaint \\
+\texttt{p} & Promote focused complaint \\
+\texttt{x} & Mark focused complaint as spam \\
+\texttt{e} & Mark focused complaint done \\
+\texttt{a} & Assign-to-me event (placeholder) \\
+\texttt{m} & Merge event (placeholder) \\
+\texttt{g} then \texttt{t} & Go to Triage \\
+\texttt{g} then \texttt{b} & Go to Board \\
+\texttt{g} then \texttt{s} & Go to Settings \\
+\end{longtable}
+
+\section{Status Reference}
+\begin{itemize}
+  \item \texttt{TRIAGE\_PENDING}: New triage complaint
+  \item \texttt{TRIAGE\_SPAM}: Triage complaint marked as spam
+  \item \texttt{TRIAGE\_PROMOTED}: Exists in model (current promote flow sets \texttt{BACKLOG})
+  \item \texttt{BACKLOG}: Board backlog
+  \item \texttt{TODO}: Ready for implementation
+  \item \texttt{IN\_PROGRESS}: Active work
+  \item \texttt{IN\_REVIEW}: Under review
+  \item \texttt{DONE}: Completed
+  \item \texttt{CLOSED}: Closed/duplicate terminal state
+\end{itemize}
+
+\section{Implemented vs Placeholder}
+Implemented and persisted:
+\begin{itemize}
+  \item triage promote, spam, done,
+  \item bulk promote and bulk spam,
+  \item board drag-and-drop status updates,
+  \item complaint creation,
+  \item drawer data loading.
+\end{itemize}
+
+Placeholder/phase-2 style interactions:
+\begin{itemize}
+  \item settings cards,
+  \item merge and duplicate-flag actions,
+  \item assign-to-me keyboard/command behavior,
+  \item note submission from textareas.
+\end{itemize}
+
+\section{Troubleshooting}
+\subsection*{App or DB errors}
+Ensure Docker is running, then execute:
+\begin{verbatim}
+npm run db:up
+npm run db:push
+npm run db:seed
+\end{verbatim}
+
+\subsection*{No demo data visible}
+Reseed:
+\begin{verbatim}
+npm run db:seed
+\end{verbatim}
+
+\subsection*{Port 5432 conflict}
+Stop conflicting PostgreSQL service or update database configuration.
+
+\subsection*{UI appears stale}
+Hard refresh browser and retry action.
+
+\section{Suggested Daily Workflow}
+\begin{enumerate}
+  \item Start in Triage Inbox for pending and critical complaints.
+  \item Promote valid complaints to board.
+  \item Mark clear spam quickly.
+  \item Drive active work across board columns.
+  \item Open drawer for context before major state changes.
+  \item Create direct internal complaints via modal when needed.
+\end{enumerate}
+
+\end{document}
